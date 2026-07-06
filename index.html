@@ -1,158 +1,96 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agro no Brasil</title>
-<style>
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #F6EFE1;
-    color: #222;
-    margin: 0;
-    line-height: 1.6;
-  }
-  header {
-    background: #2A4D2A;
-    color: white;
-    padding: 30px 20px;
-    text-align: center;
-  }
-  header h1 { margin: 0 0 8px; }
-  header p { margin: 0; color: #cfe0cf; }
-
-  section {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 30px 20px;
-  }
-  h2 {
-    color: #2A4D2A;
-    border-bottom: 2px solid #C97A3B;
-    padding-bottom: 6px;
-  }
-
-  .stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 16px;
-  }
-  .stat {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 16px;
-    flex: 1;
-    min-width: 150px;
-    text-align: center;
-  }
-  .stat .num {
-    font-size: 28px;
-    font-weight: bold;
-    color: #C97A3B;
-  }
-  .stat .label {
-    font-size: 13px;
-    color: #555;
-    margin-top: 6px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 16px;
-    background: white;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px 10px;
-    text-align: left;
-    font-size: 14px;
-  }
-  th {
-    background: #2A4D2A;
-    color: white;
-  }
-
-  ul { padding-left: 20px; }
-
-  footer {
-    text-align: center;
-    padding: 20px;
-    font-size: 12px;
-    color: #777;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubrica de Vendas - Dashboard Comercial</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <h1>Agro no Brasil</h1>
-  <p>Um resumo sobre o agronegócio brasileiro</p>
-</header>
+    <main class="card-vendas">
+        <h1>Rubrica de Desempenho Comercial</h1>
+        <p>Critérios simples utilizados para avaliar o funil e a performance do time de vendas.</p>
 
-<section>
-  <h2>Números principais (2025)</h2>
-  <div class="stats">
-    <div class="stat">
-      <div class="num">US$ 169 bi</div>
-      <div class="label">exportados pelo agronegócio</div>
-    </div>
-    <div class="stat">
-      <div class="num">25%</div>
-      <div class="label">do PIB brasileiro</div>
-    </div>
-    <div class="stat">
-      <div class="num">352 mi t</div>
-      <div class="label">de grãos produzidos</div>
-    </div>
-  </div>
-</section>
+        <table class="tabela-rubrica">
+            <thead>
+                <tr>
+                    <th scope="col">Indicador (KPI)</th>
+                    <th scope="col">Meta Mínima</th>
+                    <th scope="col">Impacto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Prospecção ativa</td>
+                    <td>15 novos leads / dia</td>
+                    <td>Alto</td>
+                </tr>
+                <tr>
+                    <td>Taxa de Conversão</td>
+                    <td>12% do funil</td>
+                    <td>Crítico</td>
+                </tr>
+                <tr>
+                    <td>Ticket Médio</td>
+                    <td>R$ 1.500,00</td>
+                    <td>Médio</td>
+                </tr>
+            </tbody>
+        </table>
 
-<section>
-  <h2>Regiões e suas produções</h2>
-  <table>
-    <tr><th>Região</th><th>Principais produtos</th></tr>
-    <tr><td>Centro-Oeste</td><td>Soja, milho, boi gordo</td></tr>
-    <tr><td>Sul</td><td>Grãos, suínos, aves</td></tr>
-    <tr><td>Sudeste</td><td>Café, cana-de-açúcar</td></tr>
-    <tr><td>Nordeste</td><td>Frutas irrigadas, algodão</td></tr>
-    <tr><td>Norte</td><td>Pecuária, grãos em expansão</td></tr>
-  </table>
-</section>
+        <button class="btn-acao" aria-label="Atualizar dados da planilha de vendas do sistema">
+            Atualizar Relatório
+        </button>
+    </main>
 
-<section>
-  <h2>Calendário de safra</h2>
-  <ul>
-    <li><b>Soja:</b> plantio (set-dez), colheita (jan-abr)</li>
-    <li><b>Milho (safrinha):</b> plantio (jan-mar), colheita (mai-ago)</li>
-    <li><b>Café:</b> colheita (mai-set)</li>
-    <li><b>Cana-de-açúcar:</b> colheita (abr-nov)</li>
-  </ul>
-</section>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubrica de Vendas - Dashboard Comercial</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<section>
-  <h2>Principais destinos das exportações</h2>
-  <ul>
-    <li>China — US$ 55,3 bi</li>
-    <li>União Europeia — US$ 25,2 bi</li>
-    <li>Estados Unidos — US$ 11,4 bi</li>
-  </ul>
-</section>
+    <main class="card-vendas">
+        <h1>Rubrica de Desempenho Comercial</h1>
+        <p>Critérios simples utilizados para avaliar o funil e a performance do time de vendas.</p>
 
-<section>
-  <h2>Tecnologia no campo</h2>
-  <ul>
-    <li>Agricultura de precisão (satélite e sensores)</li>
-    <li>Bioinsumos (biofertilizantes e controle biológico)</li>
-    <li>Plantio direto (menos erosão do solo)</li>
-  </ul>
-</section>
+        <table class="tabela-rubrica">
+            <thead>
+                <tr>
+                    <th scope="col">Indicador (KPI)</th>
+                    <th scope="col">Meta Mínima</th>
+                    <th scope="col">Impacto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Prospecção ativa</td>
+                    <td>15 novos leads / dia</td>
+                    <td>Alto</td>
+                </tr>
+                <tr>
+                    <td>Taxa de Conversão</td>
+                    <td>12% do funil</td>
+                    <td>Crítico</td>
+                </tr>
+                <tr>
+                    <td>Ticket Médio</td>
+                    <td>R$ 1.500,00</td>
+                    <td>Médio</td>
+                </tr>
+            </tbody>
+        </table>
 
-<footer>
-  Fontes: MAPA/Governo Federal e Cepea-Esalq/USP (dados de 2025)
-</footer>
+        <button class="btn-acao" aria-label="Atualizar dados da planilha de vendas do sistema">
+            Atualizar Relatório
+        </button>
+    </main>
 
 </body>
 </html>
