@@ -1,96 +1,391 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rubrica de Vendas - Dashboard Comercial</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Agronegócio Brasileiro</title>
+<style>
+  :root{
+    --bg: #14170f;
+    --surface: #1c2117;
+    --surface-2: #232b1c;
+    --border: #3a4530;
+    --text: #dfe6d6;
+    --muted: #93a082;
+    --green: #5a9c3f;    /* cor 1 - acerto / lavoura */
+    --green-hover: #6cb64d;
+    --gold: #d9a441;     /* cor 2 - destaque / oferta */
+    --red: #d9534f;      /* usada só para feedback de erro */
+    --focus: #7cc4ff;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height:1.6;
+  }
+
+  a{ color: var(--focus); }
+
+  header.topbar{
+    background: var(--surface);
+    border-bottom:1px solid var(--border);
+    padding: 14px 24px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  header.topbar svg{ fill: var(--gold); flex-shrink:0; }
+  header.topbar strong{ font-weight:600; }
+
+  main{
+    max-width: 760px;
+    margin: 32px auto;
+    padding: 0 20px 60px;
+  }
+
+  .cartao{
+    background: var(--surface);
+    border:1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  h1{
+    font-size: 1.4rem;
+    margin: 0 0 6px;
+  }
+
+  .badge{
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border:1px solid var(--gold);
+    color: var(--gold);
+    font-weight:600;
+    display:inline-block;
+    margin-bottom: 12px;
+  }
+
+  .texto-base p{
+    color: var(--text);
+    margin: 0 0 12px;
+  }
+
+  .texto-base p:last-child{ margin-bottom: 0; }
+
+  fieldset{
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin: 0 0 18px;
+  }
+
+  fieldset legend{
+    padding: 0 8px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .opcao{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding: 8px 6px;
+    border-radius: 6px;
+    cursor:pointer;
+  }
+
+  .opcao:hover{ background: var(--surface-2); }
+
+  .opcao input[type="radio"]{
+    margin-top: 4px;
+    accent-color: var(--green);
+    width: 16px;
+    height: 16px;
+    flex-shrink:0;
+  }
+
+  .opcao label{ cursor:pointer; }
+
+  /* foco visível para acessibilidade via teclado */
+  input:focus-visible, button:focus-visible, a:focus-visible{
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .feedback-questao{
+    font-size: 0.85rem;
+    margin-top: 6px;
+    display:none;
+  }
+
+  .feedback-questao.mostrar{ display:block; }
+  .feedback-questao.correto{ color: var(--green); }
+  .feedback-questao.incorreto{ color: var(--red); }
+
+  .opcao.marcado-correto{ background: rgba(90,156,63,0.15); }
+  .opcao.marcado-incorreto{ background: rgba(217,83,79,0.15); }
+
+  .btn-verificar{
+    background: var(--green);
+    color: #fff;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.05s ease;
+  }
+
+  .btn-verificar:hover{ background: var(--green-hover); }
+  .btn-verificar:active{ transform: translateY(1px); }
+
+  #resultado{
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 6px;
+    border: 1px solid var(--gold);
+    background: var(--surface-2);
+    display:none;
+    font-weight: 600;
+  }
+
+  #resultado.mostrar{ display:block; }
+
+  footer.rubrica{
+    text-align: right;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border);
+  }
+
+  footer.rubrica .assinatura{
+    font-family: "Brush Script MT", cursive;
+    font-size: 2rem;
+    color: var(--gold);
+    display:block;
+    line-height: 1;
+  }
+
+  footer.rubrica .selo{
+    font-size: 0.75rem;
+    color: var(--muted);
+    display:block;
+    margin-top: 4px;
+  }
+
+  .sr-only{
+    position:absolute;
+    width:1px;height:1px;
+    padding:0;margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
 </head>
 <body>
 
-    <main class="card-vendas">
-        <h1>Rubrica de Desempenho Comercial</h1>
-        <p>Critérios simples utilizados para avaliar o funil e a performance do time de vendas.</p>
+  <header class="topbar">
+    <svg height="24" width="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M12 2c-1 3-4 4-4 8 0 2.2 1.8 4 4 4s4-1.8 4-4c0-4-3-5-4-8z"/>
+      <path d="M11 22v-8h2v8h-2z"/>
+    </svg>
+    <strong>agro-safra</strong>
+    <span style="color:var(--muted)">/ quiz</span>
+  </header>
 
-        <table class="tabela-rubrica">
-            <thead>
-                <tr>
-                    <th scope="col">Indicador (KPI)</th>
-                    <th scope="col">Meta Mínima</th>
-                    <th scope="col">Impacto</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Prospecção ativa</td>
-                    <td>15 novos leads / dia</td>
-                    <td>Alto</td>
-                </tr>
-                <tr>
-                    <td>Taxa de Conversão</td>
-                    <td>12% do funil</td>
-                    <td>Crítico</td>
-                </tr>
-                <tr>
-                    <td>Ticket Médio</td>
-                    <td>R$ 1.500,00</td>
-                    <td>Médio</td>
-                </tr>
-            </tbody>
-        </table>
+  <main>
 
-        <button class="btn-acao" aria-label="Atualizar dados da planilha de vendas do sistema">
-            Atualizar Relatório
-        </button>
-    </main>
+    <article class="cartao">
+      <span class="badge">📖 Texto para leitura</span>
+      <h1>O papel da tecnologia no agronegócio brasileiro</h1>
 
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rubrica de Vendas - Dashboard Comercial</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+      <div class="texto-base">
+        <p>
+          Nas últimas décadas, o agronegócio brasileiro deixou de depender apenas
+          da expansão de área plantada para crescer e passou a investir pesado em
+          tecnologia. Sementes geneticamente melhoradas, sensores de umidade do
+          solo e imagens de satélite ajudam o produtor a decidir o momento exato
+          de plantar, irrigar e colher.
+        </p>
+        <p>
+          Essa abordagem, conhecida como agricultura de precisão, permite aplicar
+          fertilizantes e defensivos apenas onde são realmente necessários,
+          reduzindo desperdício e custos. Tratores e colheitadeiras equipados com
+          piloto automático via GPS também aumentam a eficiência das operações
+          no campo, mesmo durante a noite.
+        </p>
+        <p>
+          Além da tecnologia embarcada nas máquinas, cresce o uso de aplicativos
+          de gestão rural, que reúnem dados financeiros, climáticos e de
+          produtividade em um só lugar. Isso ajuda pequenos e grandes produtores
+          a planejar a próxima safra com mais segurança e a negociar melhores
+          condições de venda.
+        </p>
+        <p>
+          Apesar dos ganhos, o setor ainda enfrenta desafios como o acesso à
+          internet de qualidade em áreas rurais mais remotas e o custo elevado de
+          alguns equipamentos, o que exige políticas públicas e linhas de
+          crédito voltadas especificamente para a modernização do campo.
+        </p>
+      </div>
+    </article>
 
-    <main class="card-vendas">
-        <h1>Rubrica de Desempenho Comercial</h1>
-        <p>Critérios simples utilizados para avaliar o funil e a performance do time de vendas.</p>
+    <form class="cartao" id="quiz-form" novalidate>
+      <h2 style="margin-top:0;">Teste seu entendimento</h2>
 
-        <table class="tabela-rubrica">
-            <thead>
-                <tr>
-                    <th scope="col">Indicador (KPI)</th>
-                    <th scope="col">Meta Mínima</th>
-                    <th scope="col">Impacto</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Prospecção ativa</td>
-                    <td>15 novos leads / dia</td>
-                    <td>Alto</td>
-                </tr>
-                <tr>
-                    <td>Taxa de Conversão</td>
-                    <td>12% do funil</td>
-                    <td>Crítico</td>
-                </tr>
-                <tr>
-                    <td>Ticket Médio</td>
-                    <td>R$ 1.500,00</td>
-                    <td>Médio</td>
-                </tr>
-            </tbody>
-        </table>
+      <fieldset>
+        <legend>1. O que caracteriza a agricultura de precisão, segundo o texto?</legend>
 
-        <button class="btn-acao" aria-label="Atualizar dados da planilha de vendas do sistema">
-            Atualizar Relatório
-        </button>
-    </main>
+        <div class="opcao">
+          <input type="radio" name="q1" id="q1a" value="errado">
+          <label for="q1a">Aumentar a área plantada a cada safra</label>
+        </div>
+        <div class="opcao">
+          <input type="radio" name="q1" id="q1b" value="certo">
+          <label for="q1b">Aplicar insumos apenas onde são necessários, reduzindo desperdício</label>
+        </div>
+        <div class="opcao">
+          <input type="radio" name="q1" id="q1c" value="errado">
+          <label for="q1c">Eliminar totalmente o uso de máquinas agrícolas</label>
+        </div>
+
+        <p class="feedback-questao" data-questao="q1"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. Qual tecnologia ajuda tratores e colheitadeiras a operar até de noite?</legend>
+
+        <div class="opcao">
+          <input type="radio" name="q2" id="q2a" value="certo">
+          <label for="q2a">Piloto automático via GPS</label>
+        </div>
+        <div class="opcao">
+          <input type="radio" name="q2" id="q2b" value="errado">
+          <label for="q2b">Sementes geneticamente melhoradas</label>
+        </div>
+        <div class="opcao">
+          <input type="radio" name="q2" id="q2c" value="errado">
+          <label for="q2c">Aplicativos de gestão financeira</label>
+        </div>
+
+        <p class="feedback-questao" data-questao="q2"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. Para que servem os aplicativos de gestão rural citados no texto?</legend>
+
+        <div class="opcao">
+          <input type="radio" name="q3" id="q3a" value="errado">
+          <label for="q3a">Substituir totalmente o trabalho do agrônomo</label>
+        </div>
+        <div class="opcao">
+          <input type="radio" name="q3" id="q3b" value="errado">
+          <label for="q3b">Controlar apenas o clima da região</label>
+        </div>
+        <div class="opcao">
+          <input type="radio" name="q3" id="q3c" value="certo">
+          <label for="q3c">Reunir dados financeiros, climáticos e de produtividade em um só lugar</label>
+        </div>
+
+        <p class="feedback-questao" data-questao="q3"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>4. Segundo o texto, qual é um dos desafios do setor?</legend>
+
+        <div class="opcao">
+          <input type="radio" name="q4" id="q4a" value="certo">
+          <label for="q4a">Acesso limitado à internet em áreas rurais remotas</label>
+        </div>
+        <div class="opcao">
+          <input type="radio" name="q4" id="q4b" value="errado">
+          <label for="q4b">Excesso de crédito disponível para os produtores</label>
+        </div>
+        <div class="opcao">
+          <input type="radio" name="q4" id="q4c" value="errado">
+          <label for="q4c">Falta de interesse dos produtores em novas tecnologias</label>
+        </div>
+
+        <p class="feedback-questao" data-questao="q4"></p>
+      </fieldset>
+
+      <button type="submit" class="btn-verificar">Verificar respostas</button>
+
+      <div id="resultado" role="status" aria-live="polite"></div>
+    </form>
+
+    <footer class="rubrica">
+      <span class="assinatura" aria-hidden="true">Agro Safra</span>
+      <span class="selo">Quiz revisado pela equipe pedagógica do Agro Safra</span>
+    </footer>
+
+  </main>
+
+<script>
+  const form = document.getElementById('quiz-form');
+  const resultado = document.getElementById('resultado');
+
+  form.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+
+    const perguntas = ['q1', 'q2', 'q3', 'q4'];
+    let acertos = 0;
+    let respondeuTudo = true;
+
+    perguntas.forEach((nome) => {
+      const selecionado = form.querySelector(`input[name="${nome}"]:checked`);
+      const feedback = form.querySelector(`.feedback-questao[data-questao="${nome}"]`);
+      const opcoes = form.querySelectorAll(`input[name="${nome}"]`);
+
+      // limpa marcações anteriores
+      opcoes.forEach((opcao) => {
+        opcao.closest('.opcao').classList.remove('marcado-correto', 'marcado-incorreto');
+      });
+
+      if (!selecionado){
+        respondeuTudo = false;
+        feedback.textContent = 'Selecione uma alternativa.';
+        feedback.className = 'feedback-questao mostrar incorreto';
+        return;
+      }
+
+      const acertou = selecionado.value === 'certo';
+      selecionado.closest('.opcao').classList.add(acertou ? 'marcado-correto' : 'marcado-incorreto');
+
+      if (acertou){
+        acertos += 1;
+        feedback.textContent = 'Resposta correta!';
+        feedback.className = 'feedback-questao mostrar correto';
+      } else {
+        feedback.textContent = 'Resposta incorreta. Releia o texto para conferir.';
+        feedback.className = 'feedback-questao mostrar incorreto';
+      }
+    });
+
+    if (!respondeuTudo){
+      resultado.textContent = 'Responda todas as perguntas antes de verificar.';
+      resultado.classList.add('mostrar');
+      return;
+    }
+
+    resultado.textContent = `Você acertou ${acertos} de ${perguntas.length} perguntas.`;
+    resultado.classList.add('mostrar');
+  });
+</script>
 
 </body>
 </html>
